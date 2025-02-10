@@ -1,0 +1,317 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+      "title": "Управление списком задач. OPENAPI спецификация.",
+      "version": "0.0.1"
+  },
+  "servers": [
+      {
+          "url": "https://restapi",
+          "description": "dev"
+      }
+  ],
+  "paths": {
+      "/tasks": {
+          "get": {
+              "summary": "Получение списка задач. Возвращает список задач с возможностью поиска и сортировки.",
+              "tags": [
+                  "Управление списком задач"
+              ],
+              "operationId": "getAllTasks",
+              "parameters": [
+                  {
+                      "in": "query",
+                      "name": "search",
+                      "schema": {
+                          "type": "string"
+                      },
+                      "description": "Строка для поиска по названию задачи",
+                      "required": false
+                  },
+                  {
+                      "in": "query",
+                      "name": "sort",
+                      "schema": {
+                          "type": "string"
+                      },
+                      "description": "Поле для сортировки (например, \"title\" или \"-title\")",
+                      "required": false
+                  },
+                  {
+                      "in": "query",
+                      "name": "page",
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "description": "Номер страницы для пагинации",
+                      "required": false
+                  },
+                  {
+                      "in": "query",
+                      "name": "limit",
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "description": "Количество элементов на странице",
+                      "required": false
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Успешный ответ. Список задач пришёл.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Tasks"
+                              }
+                          }
+                      }
+                  },
+                  "default": {
+                      "description": "Неуспешный ответ.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "post": {
+              "summary": "Создание задачи. Создает новую задачу.",
+              "tags": [
+                  "Управление списком задач"
+              ],
+              "operationId": "createTask",
+              "requestBody": {
+                  "required": true,
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "$ref": "#/components/schemas/Task"
+                          }
+                      }
+                  }
+              },
+              "responses": {
+                  "201": {
+                      "description": "Успешный ответ. Задача успешно создана.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Task"
+                              }
+                          }
+                      }
+                  },
+                  "default": {
+                      "description": "Неуспешный ответ.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      },
+      "/tasks/{id}": {
+          "get": {
+              "summary": "Получение конкретной задачи. Возвращает задачу по её ID.",
+              "tags": [
+                  "Управление списком задач"
+              ],
+              "operationId": "getTaskById",
+              "parameters": [
+                  {
+                      "in": "path",
+                      "name": "id",
+                      "required": true,
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "description": "Идентификатор задачи"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Успешный ответ. Получение конкретной задачи.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Task"
+                              }
+                          }
+                      }
+                  },
+                  "default": {
+                      "description": "Неуспешный ответ.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "put": {
+              "summary": "Обновление конкретной задачи. Обновляет информацию о задаче.",
+              "tags": [
+                  "Управление списком задач"
+              ],
+              "operationId": "updateTaskById",
+              "requestBody": {
+                  "required": true,
+                  "content": {
+                      "application/json": {
+                          "schema": {
+                              "$ref": "#/components/schemas/Task"
+                          }
+                      }
+                  }
+              },
+              "parameters": [
+                  {
+                      "in": "path",
+                      "name": "id",
+                      "required": true,
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "description": "Идентификатор задачи"
+                  }
+              ],
+              "responses": {
+                  "200": {
+                      "description": "Успешный ответ. Задача обновлена.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Task"
+                              }
+                          }
+                      }
+                  },
+                  "default": {
+                      "description": "Неуспешный ответ.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          },
+          "delete": {
+              "summary": "Удаление задачи. Удаляет задачу по её ID.",
+              "tags": [
+                  "Управление списком задач"
+              ],
+              "operationId": "deleteTaskById",
+              "parameters": [
+                  {
+                      "in": "path",
+                      "name": "id",
+                      "required": true,
+                      "schema": {
+                          "type": "integer"
+                      },
+                      "description": "Идентификатор задачи"
+                  }
+              ],
+              "responses": {
+                  "204": {
+                      "description": "Успешный ответ. Задача успешно удалена.",
+                      "content": {
+                          "application/json": {}
+                      }
+                  },
+                  "default": {
+                      "description": "Неуспешный ответ.",
+                      "content": {
+                          "application/json": {
+                              "schema": {
+                                  "$ref": "#/components/schemas/Error"
+                              }
+                          }
+                      }
+                  }
+              }
+          }
+      }
+  },
+  "components": {
+      "schemas": {
+          "Task": {
+              "type": "object",
+              "required": [
+                  "id",
+                  "title",
+                  "description",
+                  "due_date",
+                  "create_date",
+                  "priority",
+                  "category",
+                  "status"
+              ],
+              "properties": {
+                  "id": {
+                      "type": "integer"
+                  },
+                  "title": {
+                      "type": "string"
+                  },
+                  "description": {
+                      "type": "string"
+                  },
+                  "due_date": {
+                      "type": "string",
+                      "format": "date-time"
+                  },
+                  "create_date": {
+                      "type": "string",
+                      "format": "date-time"
+                  },
+                  "priority": {
+                      "type": "string"
+                  },
+                  "category": {
+                      "type": "string"
+                  },
+                  "status": {
+                      "type": "string"
+                  }
+              }
+          },
+          "Tasks": {
+              "type": "array",
+              "items": {
+                  "$ref": "#/components/schemas/Task"
+              }
+          },
+          "Error": {
+              "type": "object",
+              "required": [
+                  "code",
+                  "title"
+              ],
+              "properties": {
+                  "code": {
+                      "type": "integer"
+                  },
+                  "message": {
+                      "type": "string"
+                  }
+              }
+          }
+      }
+  }
+}
